@@ -3,7 +3,7 @@
 public class BasicSuggestionModel
 {
     [BsonRepresentation(BsonType.ObjectId)]
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Suggestion { get; set; }
 
     public BasicSuggestionModel()
