@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.RegisterCoreBlazorServices();
+builder.RegisterSuggestionDataServices();
 
 var app = builder.Build();
 
