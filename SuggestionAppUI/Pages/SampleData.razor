@@ -1,0 +1,203 @@
+﻿@page "/SampleData"
+@inject ICategoryData categoryData
+@inject IStatusData statusData
+@inject ISuggestionData suggestionData
+@inject IUserData userData
+
+<h3>SampleData</h3>
+
+@if (categoriesCreated)
+{
+    <div class="alert alert-success" role="alert">
+        Categories created!
+    </div>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateCategories">Create Categories</button>
+}
+
+@if (statusesCreated)
+{
+    <div class="alert alert-success" role="alert">
+        Statuses created!
+    </div>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateStatuses">Create Statuses</button>
+}
+
+<button class="btn btn-danger" @onclick="GenerateSampleData">Generate Sample Data</button>
+
+
+@code {
+    private bool categoriesCreated = false;
+    private bool statusesCreated = false;
+
+    private async Task CreateCategories()
+    {
+        var categories = await categoryData.GetCategoriesAsync();
+
+        if (categories?.Count > 0)
+        {
+            return;
+        }
+
+        CategoryModel category = new()
+            {
+                Name = "Courses",
+                Description = "Full paid courses."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                Name = "Dev Questions",
+                Description = "Advices for developers."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                Name = "In-Depth Tutorial",
+                Description = "A Deep-dive video on how to use a topic."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                Name = "10-Minute Training",
+                Description = "A quick \"How to\" video."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                Name = "Other",
+                Description = "Not sure which category this fits in."
+            };
+        await categoryData.CreateCategory(category);
+
+        categoriesCreated = true;
+    }
+
+    private async Task CreateStatuses()
+    {
+        var statuses = await statusData.GetStatusesAsync();
+
+        if (statuses?.Count > 0)
+        {
+            return;
+        }
+
+        StatusModel status = new()
+            {
+                Name = "Completed",
+                Description = "Suggestion was accepted and created."
+            };
+        await statusData.CreateStatus(status);
+
+        status = new()
+            {
+                Name = "Watching",
+                Description = "Suggestion is interesting. We are watching how much interest it gets over the next couple of days and potentially accept it."
+            };
+        await statusData.CreateStatus(status);
+
+        status = new()
+            {
+                Name = "Upcoming",
+                Description = "Suggestion was accepted. It will be released soon."
+            };
+        await statusData.CreateStatus(status);
+
+        status = new()
+            {
+                Name = "Dismissed",
+                Description = "We are not going to elaborate on this topic."
+            };
+        await statusData.CreateStatus(status);
+
+        statusesCreated = true;
+    }
+
+    private async Task GenerateSampleData()
+    {
+        UserModel user = new()
+            {
+                FirstName = "Krzysztof",
+                LastName = "Badower",
+                EmailAddress = "kbadower@test.com",
+                DisplayName = "Krz Test",
+                ObjectIdentifier = "abc-123"
+            };
+        await userData.CreateUser(user);
+
+        var authUser = await userData.GetUserFromAuthentication("abc-123");
+        var categories = await categoryData.GetCategoriesAsync();
+        var statuses = await statusData.GetStatusesAsync();
+
+        HashSet<string> userVotes = new();
+        userVotes.Add("1");
+        userVotes.Add("2");
+        userVotes.Add("3");
+
+        SuggestionModel suggestion = new()
+        {
+            Author = new BasicUserModel(authUser),
+            Category = categories[0],
+            Suggestion = "First suggestion",
+            Description = "Auto-generated from code."
+        };
+        await suggestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+        {
+            Author = new BasicUserModel(authUser),
+            Category = categories[1],
+            Suggestion = "Second suggestion",
+            Description = "Auto-generated from code.",
+            Status = statuses[0],
+            OwnerNotes = "This is the owner note for suggestion."    
+        };
+        await suggestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+            {
+                Author = new BasicUserModel(authUser),
+                Category = categories[2],
+                Suggestion = "Third suggestion",
+                Description = "Auto-generated from code.",
+                Status = statuses[1],
+                OwnerNotes = "This is the owner note for suggestion."
+            };
+        await suggestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+        {
+            Author = new BasicUserModel(authUser),
+            Category = categories[3],
+            Suggestion = "Fourth suggestion",
+            Description = "Auto-generated from code.",
+            Status = statuses[2],
+            UserVotes = userVotes,
+            OwnerNotes = "This is the owner note for suggestion."
+        };
+        await suggestionData.CreateSuggestion(suggestion);
+
+        userVotes.Add("4");
+
+        suggestion = new()
+        {
+            Author = new BasicUserModel(authUser),
+            Category = categories[4],
+            Suggestion = "Fifth suggestion",
+            Description = "Auto-generated from code.",
+            Status = statuses[3],
+            UserVotes = userVotes,
+            OwnerNotes = "This is the owner note for suggestion."
+        };
+        await suggestionData.CreateSuggestion(suggestion);
+    }
+}
