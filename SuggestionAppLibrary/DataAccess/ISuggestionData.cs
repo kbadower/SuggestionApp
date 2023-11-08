@@ -6,6 +6,7 @@
         Task<List<SuggestionModel>> GetApprovedSuggestionsAsync();
         Task<SuggestionModel> GetSuggestion(string id);
         Task<List<SuggestionModel>> GetSuggestionsAsync();
+        Task<List<SuggestionModel>> GetUserSuggestions(string userId);
         Task<List<SuggestionModel>> GetWaitingForApprovalSuggestions();
         Task UpdateSuggestion(SuggestionModel suggestion);
         Task UpvoteSuggestion(string suggestionId, string userId);
