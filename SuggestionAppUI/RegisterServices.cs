@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using MongoDB.Driver;
 
 namespace SuggestionAppUI
@@ -9,8 +10,9 @@ namespace SuggestionAppUI
         public static void RegisterCoreBlazorServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
+            builder.Services.AddServerSideBlazor().AddMicrosoftIdentityConsentHandler();
             builder.Services.AddMemoryCache();
+            builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
         }
 
         public static void RegisterSuggestionDataServices(this WebApplicationBuilder builder)
