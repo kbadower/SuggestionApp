@@ -33,7 +33,7 @@ app.UseRewriter(
     new RewriteOptions().Add(
         context =>
         {
-            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignnedOut")
+            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut")
             {
                 context.HttpContext.Response.Redirect("/");
             }
