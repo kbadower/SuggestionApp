@@ -2,7 +2,7 @@
 @inject ISuggestionData suggestionData
 @inject IUserData userData
 @inject NavigationManager navManager
-@attribute [Authorize]
+@attribute [Authorize(Policy = "Admin")]
 
 <h1>Pending Submissions</h1>
 <div>

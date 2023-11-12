@@ -1,7 +1,9 @@
 ﻿@page "/Profile"
+@attribute [Authorize]
 @inject ISuggestionData suggestionData
 @inject IUserData userData
 @inject NavigationManager navManager
+
 
 <h1>My Profile</h1>
 
