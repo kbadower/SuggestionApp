@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Rewrite;
 using SuggestionAppUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.RegisterCoreBlazorServices();
 builder.RegisterSuggestionDataServices();
+builder.RegisterAuthServices();
 
 var app = builder.Build();
 
@@ -23,6 +25,20 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseRewriter(
+    new RewriteOptions().Add(
+        context =>
+        {
+            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignnedOut")
+            {
+                context.HttpContext.Response.Redirect("/");
+            }
+        }
+        ));
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
