@@ -58,7 +58,6 @@
     private List<CategoryModel> categories;
     private UserModel loggedInUser;
 
-
     protected async override Task OnInitializedAsync()
     {
         categories = await categoryData.GetCategoriesAsync();
